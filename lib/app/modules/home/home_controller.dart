@@ -1,4 +1,4 @@
-import 'package:flutter_shortener/app/modules/models/urls_view_model.dart';
+import 'package:flutter_shortener/app/modules/models/urls_model.dart';
 import 'package:flutter_shortener/app/modules/repositories/isgd_repository.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,8 +11,12 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   IsGdRepository repository;
 
+  _HomeControllerBase(this.repository) {
+    getUrls(longUrl);
+  }
+
   @observable
-  List<UrlsViewModel> urlsList = [];
+  ObservableList<List<UrlsModel>> urlsList = ObservableList();
 
   @observable
   String longUrl = '';
@@ -20,17 +24,19 @@ abstract class _HomeControllerBase with Store {
   @action
   String setLongUrl(String value) => longUrl = value;
 
-  _HomeControllerBase(this.repository) {
-    getList(longUrl);
-  }
+  @computed
+  bool get isValidUrlsList => urlsList.isNotEmpty;
 
   @computed
   bool get isValidUrl => longUrl.isNotEmpty;
 
   @action
-  getList(String url) {
+  getUrls(String url) {
     if (isValidUrl) {
-      repository.shortingUrl(longUrl).then((url) => urlsList.add(url));
+      repository
+          .shortingUrl(url)
+          .then((urls) => urlsList.add(urls))
+          .asObservable();
     }
   }
 }

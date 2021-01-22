@@ -19,6 +19,13 @@ final $HomeController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
+  Computed<bool> _$isValidUrlsListComputed;
+
+  @override
+  bool get isValidUrlsList =>
+      (_$isValidUrlsListComputed ??= Computed<bool>(() => super.isValidUrlsList,
+              name: '_HomeControllerBase.isValidUrlsList'))
+          .value;
   Computed<bool> _$isValidUrlComputed;
 
   @override
@@ -30,13 +37,13 @@ mixin _$HomeController on _HomeControllerBase, Store {
   final _$urlsListAtom = Atom(name: '_HomeControllerBase.urlsList');
 
   @override
-  List<UrlsViewModel> get urlsList {
+  ObservableList<List<UrlsModel>> get urlsList {
     _$urlsListAtom.reportRead();
     return super.urlsList;
   }
 
   @override
-  set urlsList(List<UrlsViewModel> value) {
+  set urlsList(ObservableList<List<UrlsModel>> value) {
     _$urlsListAtom.reportWrite(value, super.urlsList, () {
       super.urlsList = value;
     });
@@ -72,11 +79,11 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  dynamic getList(String url) {
+  dynamic getUrls(String url) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
-        name: '_HomeControllerBase.getList');
+        name: '_HomeControllerBase.getUrls');
     try {
-      return super.getList(url);
+      return super.getUrls(url);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -87,6 +94,7 @@ mixin _$HomeController on _HomeControllerBase, Store {
     return '''
 urlsList: ${urlsList},
 longUrl: ${longUrl},
+isValidUrlsList: ${isValidUrlsList},
 isValidUrl: ${isValidUrl}
     ''';
   }

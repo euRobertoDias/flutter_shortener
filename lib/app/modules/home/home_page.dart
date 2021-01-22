@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_shortener/app/modules/models/urls_model.dart';
+import 'package:mobx/mobx.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +15,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
+  _getUrls(List<UrlsModel> urls) {
+    urls.map((url) {
+      return ListTile(
+        title: Text(url.shortUrl),
+        subtitle: Text(url.longUrl),
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +48,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 padding: EdgeInsets.only(right: 10.0),
                 child: RaisedButton(
                   onPressed: () {
-                    controller.getList(controller.longUrl);
+                    controller.getUrls(controller.longUrl);
                   },
                   child: Text('Gerar link'),
                   color: Theme.of(context).primaryColor,
@@ -48,23 +58,22 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             ],
           ),
           Expanded(
-            child: controller.urlsList.isEmpty
-                ? Center(
-                    child: Text('Adicionar links!'),
-                  )
-                : Observer(
-                    builder: (_) {
-                      return ListView.builder(
-                          itemCount: controller.urlsList.length,
-                          itemBuilder: (context, index) {
-                            var url = controller.urlsList[index];
-                            return ListTile(
-                              title: Text(url.shortUrl),
-                              subtitle: Text(url.longUrl),
-                            );
-                          });
-                    },
-                  ),
+            child: Observer(
+              builder: (_) {
+                return controller.urlsList.isEmpty
+                    ? Center(
+                        child: Text('Nenhuma url foi adicionada!'),
+                      )
+                    : ListView.builder(
+                        itemCount: controller.urlsList.length,
+                        itemBuilder: (context, index) {
+                          var url = controller.urlsList[index];
+                          return Container(
+                            child: Text('tem dados'),
+                          );
+                        });
+              },
+            ),
           ),
         ],
       ),

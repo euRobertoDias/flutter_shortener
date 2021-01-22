@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_shortener/app/modules/models/isgd_model.dart';
-import 'package:flutter_shortener/app/modules/models/urls_view_model.dart';
+import 'package:flutter_shortener/app/modules/models/urls_model.dart';
 
 class IsGdRepository {
-  var dio;
+  UrlsModel urls;
 
+  IsGdRepository({this.urls});
+
+  var dio;
   Future<dynamic> shortingUrl(String longUrl) async {
     dio = Dio();
     try {
@@ -17,9 +20,8 @@ class IsGdRepository {
 
       IsGdModel shortResponse = IsGdModel.fromJson(res);
 
-      if (longUrl.isNotEmpty && shortResponse.shorturl != null) {
-        final urls =
-            UrlsViewModel(longUrl: longUrl, shortUrl: shortResponse.shorturl);
+      if (shortResponse.shorturl != null) {
+        urls = UrlsModel(longUrl: longUrl, shortUrl: shortResponse.shorturl);
         return urls;
       } else {
         print(shortResponse.errormessage);
