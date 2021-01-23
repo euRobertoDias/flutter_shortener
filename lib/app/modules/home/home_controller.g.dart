@@ -64,6 +64,13 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$getUrlsAsyncAction = AsyncAction('_HomeControllerBase.getUrls');
+
+  @override
+  Future<dynamic> getUrls(String url) {
+    return _$getUrlsAsyncAction.run(() => super.getUrls(url));
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
 
@@ -73,17 +80,6 @@ mixin _$HomeController on _HomeControllerBase, Store {
         name: '_HomeControllerBase.setLongUrl');
     try {
       return super.setLongUrl(value);
-    } finally {
-      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic getUrls(String url) {
-    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
-        name: '_HomeControllerBase.getUrls');
-    try {
-      return super.getUrls(url);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -5,12 +5,10 @@ import 'package:flutter_shortener/app/modules/models/isgd_model.dart';
 import 'package:flutter_shortener/app/modules/models/urls_model.dart';
 
 class IsGdRepository {
-  UrlsModel urls;
-
-  IsGdRepository({this.urls});
+  List<UrlsModel> urlsList = List<UrlsModel>();
 
   var dio;
-  Future<dynamic> shortingUrl(String longUrl) async {
+  Future<List<UrlsModel>> shortingUrl(String longUrl) async {
     dio = Dio();
     try {
       Response response =
@@ -21,11 +19,12 @@ class IsGdRepository {
       IsGdModel shortResponse = IsGdModel.fromJson(res);
 
       if (shortResponse.shorturl != null) {
-        urls = UrlsModel(longUrl: longUrl, shortUrl: shortResponse.shorturl);
-        return urls;
+        UrlsModel urls =
+            UrlsModel(longUrl: longUrl, shortUrl: shortResponse.shorturl);
+        urlsList.add(urls);
+        return urlsList;
       } else {
         print(shortResponse.errormessage);
-        return shortResponse.errormessage;
       }
     } catch (e) {
       print('Esse é o Erro: $e');

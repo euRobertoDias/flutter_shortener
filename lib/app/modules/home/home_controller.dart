@@ -31,10 +31,10 @@ abstract class _HomeControllerBase with Store {
   bool get isValidUrl => longUrl.isNotEmpty;
 
   @action
-  getUrls(String url) {
+  Future getUrls(String url) async {
     if (isValidUrl) {
-      repository
-          .shortingUrl(url)
+      await repository
+          .shortingUrl(longUrl)
           .then((urls) => urlsList.add(urls))
           .asObservable();
     }
